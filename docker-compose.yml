@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: admarket
+      POSTGRES_USER: admarket
+      POSTGRES_PASSWORD: admarket
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/admarket
+      SPRING_DATASOURCE_USERNAME: admarket
+      SPRING_DATASOURCE_PASSWORD: admarket
+      APP_JWT_SECRET: "CHANGE_ME_TO_A_LONG_RANDOM_SECRET_32_CHARS_MIN"
+      APP_JWT_EXP_MINUTES: "120"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
